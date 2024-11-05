@@ -8,7 +8,7 @@ public class WonState implements GameState {
     public void handleInput(Model model) {
         Singleton singleton = Singleton.getInstance();
         singleton.getView().showWinMessage();
-        singleton.getView().disableButtons();
+        //singleton.getView().disableButtons();
     }
 
     @Override
