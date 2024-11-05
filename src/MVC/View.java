@@ -12,8 +12,9 @@ public class View extends JFrame {
     private final JLabel minesLabel;
     private final JLabel timeLabel;
     private final JLabel gameResultLabel;
-    private final JButton[][] buttons;
+    private JButton[][] buttons;
     private CellClickListener clickListener;
+    private JPanel boardPanel;
 
     public View(int rows, int cols) {
         setTitle("MineSweeper");
@@ -30,7 +31,16 @@ public class View extends JFrame {
         statusPanel.add(timeLabel);
         statusPanel.add(gameResultLabel);
 
-        JPanel boardPanel = new JPanel(new GridLayout(rows, cols));
+        boardPanel = new JPanel(new GridLayout(rows, cols));
+        addButtons(rows, cols);
+
+        add(boardPanel, BorderLayout.CENTER);
+        add(statusPanel, BorderLayout.NORTH);
+
+        setVisible(true);
+    }
+
+    private void addButtons(int rows, int cols) {
         buttons = new JButton[rows][cols];
 
         for (int i = 0; i < rows; i++) {
@@ -52,11 +62,6 @@ public class View extends JFrame {
                 });
             }
         }
-
-        add(boardPanel, BorderLayout.CENTER);
-        add(statusPanel, BorderLayout.NORTH);
-
-        setVisible(true);
     }
 
     public void setCellClickListener(CellClickListener listener) {
@@ -133,14 +138,19 @@ public class View extends JFrame {
 
     private void restartGame() {
         Singleton.getInstance().resetGame();
-        for (int i = 0; i < buttons.length; i++) {
-            for (int j = 0; j < buttons[i].length; j++) {
-                buttons[i][j].setText("");
-                buttons[i][j].setEnabled(true);
 
-            }
-        }
+        // Reset button states in the view
+        boardPanel.removeAll();
+        boardPanel.revalidate();
+        boardPanel.repaint();
+        addButtons(Singleton.getInstance().getRows(), Singleton.getInstance().getCols());
+//        for (int i = 0; i < buttons.length; i++)
+//            for (int j = 0; j < buttons[i].length; j++) {
+////                boardPanel.add(buttons[i][j]);
+//            }
+
         gameResultLabel.setText("");
     }
+
 
 }
