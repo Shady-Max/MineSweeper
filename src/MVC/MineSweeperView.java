@@ -63,11 +63,14 @@ public class MineSweeperView extends JFrame {
     }
 
     public void setFlag(int row, int col, boolean isFlagged) {
+        JButton button = buttons[row][col];
+        if (!button.isEnabled()) return;
         buttons[row][col].setText(isFlagged ? "F" : "");
     }
 
     public void revealCell(int row, int col, int adjacentMines) {
         JButton button = buttons[row][col];
+        if (!button.isEnabled()) return;
         button.setEnabled(false);
         button.setText(adjacentMines > 0 ? String.valueOf(adjacentMines) : "");
     }
@@ -78,13 +81,23 @@ public class MineSweeperView extends JFrame {
     }
 
     public void showGameOver() {
+        disableButtons();
         gameResultLabel.setText("Game Over");
         JOptionPane.showMessageDialog(this, "Game Over!");
     }
 
     public void showWinMessage() {
+        disableButtons();
         gameResultLabel.setText("You win!");
         JOptionPane.showMessageDialog(this, "You Win!");
+    }
+
+    public void disableButtons() {
+        for (int i=0; i<buttons.length; i++) {
+            for (int j=0; j<buttons[i].length; j++) {
+                buttons[i][j].setEnabled(false);
+            }
+        }
     }
 
     public void setMinesCount(int count) {
