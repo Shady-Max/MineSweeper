@@ -9,6 +9,7 @@ public class MineSweeperView extends JFrame {
 
     private final JLabel minesLabel;
     private final JLabel timeLabel;
+    private final JLabel gameResultLabel;
     private final JButton[][] buttons;
     private CellClickListener clickListener;
 
@@ -23,8 +24,10 @@ public class MineSweeperView extends JFrame {
         JPanel statusPanel = new JPanel();
         minesLabel = new JLabel("Mines: 0");
         timeLabel = new JLabel("Time: 0");
+        gameResultLabel = new JLabel("");
         statusPanel.add(minesLabel);
         statusPanel.add(timeLabel);
+        statusPanel.add(gameResultLabel);
 
         JPanel boardPanel = new JPanel(new GridLayout(rows, cols));
         buttons = new JButton[rows][cols];
@@ -75,10 +78,12 @@ public class MineSweeperView extends JFrame {
     }
 
     public void showGameOver() {
+        gameResultLabel.setText("Game Over");
         JOptionPane.showMessageDialog(this, "Game Over!");
     }
 
     public void showWinMessage() {
+        gameResultLabel.setText("You win!");
         JOptionPane.showMessageDialog(this, "You Win!");
     }
 
