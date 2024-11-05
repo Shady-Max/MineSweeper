@@ -28,7 +28,7 @@ public class Model {
         observerNotification.notifyObservers(cell);
     }
 
-    private void initializeBoard() {
+    public void initializeBoard() {
         Singleton singleton = Singleton.getInstance();
         int rows = getRows();
         int cols = getCols();

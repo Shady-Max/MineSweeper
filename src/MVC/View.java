@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import Singleton.Singleton;
+import MVC.Controller;
 
 public class View extends JFrame {
 
@@ -16,7 +18,6 @@ public class View extends JFrame {
     public View(int rows, int cols) {
         setTitle("MineSweeper");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         setSize(450,450);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -83,13 +84,35 @@ public class View extends JFrame {
     public void showGameOver() {
         disableButtons();
         gameResultLabel.setText("Game Over");
-        JOptionPane.showMessageDialog(this, "Game Over!");
+        int choice = JOptionPane.showOptionDialog(
+                this, "Game Over! Would you like to restart?",
+                "Game Over!", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                null, new String[] {"Restart", "Exit"}, "Restart"
+        );
+
+        if (choice == JOptionPane.YES_OPTION) {
+            restartGame();
+        }
+        else {
+            System.exit(0);
+        }
     }
 
     public void showWinMessage() {
         disableButtons();
         gameResultLabel.setText("You win!");
-        JOptionPane.showMessageDialog(this, "You Win!");
+        int choice = JOptionPane.showOptionDialog(
+                this, "You won! Would you like to restart?",
+                "You Win!", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                null, new String[] {"Restart", "Exit"}, "Restart"
+        );
+
+        if (choice == JOptionPane.YES_OPTION) {
+            restartGame();
+        }
+        else {
+            System.exit(0);
+        }
     }
 
     public void disableButtons() {
@@ -108,5 +131,16 @@ public class View extends JFrame {
         timeLabel.setText("Time: " + count);
     }
 
+    private void restartGame() {
+        Singleton.getInstance().resetGame();
+        for (int i = 0; i < buttons.length; i++) {
+            for (int j = 0; j < buttons[i].length; j++) {
+                buttons[i][j].setText("");
+                buttons[i][j].setEnabled(true);
+
+            }
+        }
+        gameResultLabel.setText("");
+    }
 
 }

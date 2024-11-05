@@ -8,6 +8,9 @@ import State.GameState;
 import State.LostState;
 import State.PlayingState;
 import State.WonState;
+import Observer.*;
+
+import javax.swing.*;
 
 public class Singleton {
     private static Singleton instance;
@@ -128,5 +131,15 @@ public class Singleton {
     public Singleton setModel(Model model) {
         this.model = model;
         return this;
+    }
+
+    public void resetGame() {
+        gameLost = false;
+        gameWon = false;
+        gameState = new PlayingState();
+        model.initializeBoard();
+        controller.startTimer();
+
+        model.notifyObservers(new Cell());
     }
 }
