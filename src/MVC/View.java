@@ -4,19 +4,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import Singleton.Singleton;
+import MVC.Controller;
 
 public class View extends JFrame {
 
     private final JLabel minesLabel;
     private final JLabel timeLabel;
     private final JLabel gameResultLabel;
-    private final JButton[][] buttons;
+    private JButton[][] buttons;
     private CellClickListener clickListener;
+    private JPanel boardPanel;
 
     public View(int rows, int cols) {
         setTitle("MineSweeper");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         setSize(450,450);
         setLocationRelativeTo(null);
         setResizable(false);
@@ -29,7 +31,16 @@ public class View extends JFrame {
         statusPanel.add(timeLabel);
         statusPanel.add(gameResultLabel);
 
-        JPanel boardPanel = new JPanel(new GridLayout(rows, cols));
+        boardPanel = new JPanel(new GridLayout(rows, cols));
+        addButtons(rows, cols);
+
+        add(boardPanel, BorderLayout.CENTER);
+        add(statusPanel, BorderLayout.NORTH);
+
+        setVisible(true);
+    }
+
+    private void addButtons(int rows, int cols) {
         buttons = new JButton[rows][cols];
 
         for (int i = 0; i < rows; i++) {
@@ -51,11 +62,6 @@ public class View extends JFrame {
                 });
             }
         }
-
-        add(boardPanel, BorderLayout.CENTER);
-        add(statusPanel, BorderLayout.NORTH);
-
-        setVisible(true);
     }
 
     public void setCellClickListener(CellClickListener listener) {
@@ -83,13 +89,35 @@ public class View extends JFrame {
     public void showGameOver() {
         disableButtons();
         gameResultLabel.setText("Game Over");
-        JOptionPane.showMessageDialog(this, "Game Over!");
+        int choice = JOptionPane.showOptionDialog(
+                this, "Game Over! Would you like to restart?",
+                "Game Over!", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                null, new String[] {"Restart", "Exit"}, "Restart"
+        );
+
+        if (choice == JOptionPane.YES_OPTION) {
+            restartGame();
+        }
+        else {
+            System.exit(0);
+        }
     }
 
     public void showWinMessage() {
         disableButtons();
         gameResultLabel.setText("You win!");
-        JOptionPane.showMessageDialog(this, "You Win!");
+        int choice = JOptionPane.showOptionDialog(
+                this, "You won! Would you like to restart?",
+                "You Win!", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                null, new String[] {"Restart", "Exit"}, "Restart"
+        );
+
+        if (choice == JOptionPane.YES_OPTION) {
+            restartGame();
+        }
+        else {
+            System.exit(0);
+        }
     }
 
     public void disableButtons() {
@@ -106,6 +134,22 @@ public class View extends JFrame {
 
     public void setTimeCount(int count) {
         timeLabel.setText("Time: " + count);
+    }
+
+    private void restartGame() {
+        Singleton.getInstance().resetGame();
+
+        // Reset button states in the view
+        boardPanel.removeAll();
+        boardPanel.revalidate();
+        boardPanel.repaint();
+        addButtons(Singleton.getInstance().getRows(), Singleton.getInstance().getCols());
+//        for (int i = 0; i < buttons.length; i++)
+//            for (int j = 0; j < buttons[i].length; j++) {
+////                boardPanel.add(buttons[i][j]);
+//            }
+
+        gameResultLabel.setText("");
     }
 
 

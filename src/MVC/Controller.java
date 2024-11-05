@@ -34,7 +34,7 @@ public class Controller {
         startTimer();
     }
 
-    private void startTimer() {
+    public void startTimer() {
         elapsedSeconds = 0;
         gameTimer = new Timer(1000, new ActionListener() {
             @Override
