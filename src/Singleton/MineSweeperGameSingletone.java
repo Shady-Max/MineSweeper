@@ -1,6 +1,7 @@
 package Singleton;
 
 import MVC.Cell;
+import MVC.MineSweeperView;
 
 public class MineSweeperGameSingletone {
     private static MineSweeperGameSingletone instance;
@@ -10,6 +11,7 @@ public class MineSweeperGameSingletone {
     private Cell[][] board;
     private boolean gameLost;
     private boolean gameWon;
+    private MineSweeperView view;
 
     private MineSweeperGameSingletone(int rows, int cols, int mines) {
         this.rows = rows;
@@ -29,6 +31,15 @@ public class MineSweeperGameSingletone {
             return new MineSweeperGameSingletone(10, 10, 10);
         }
         return instance;
+    }
+
+    public void setView(MineSweeperView view) {
+        this.view = view;
+    }
+
+    // Add a method to get the view
+    public MineSweeperView getView() {
+        return view;
     }
 
     public boolean isInBounds(int row, int col) {

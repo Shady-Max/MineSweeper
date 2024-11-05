@@ -4,6 +4,8 @@ import MVC.Cell;
 import MVC.MineSweeperModel;
 import MVC.MineSweeperView;
 import Singleton.MineSweeperGameSingletone;
+import Observer.Observer;
+import Observer.ObserverNotification;
 
 public class RevealCellCommand implements Command {
     private final MineSweeperModel model;
@@ -51,9 +53,10 @@ public class RevealCellCommand implements Command {
 
     private void revealCell(int row, int col) {
         Cell cell = model.getCell(row, col);
-        if (cell.isRevealed()) return;
-
-        cell.setRevealed(true);
+        if (!cell.isRevealed() && !cell.isFlagged()) {
+            cell.setRevealed(true);
+            model.notifyObservers(cell);
+        }
         view.revealCell(row, col, cell.getAdjacentMines());
 
         if (cell.getAdjacentMines() == 0) {

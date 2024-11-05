@@ -1,11 +1,31 @@
 package MVC;
 
+import java.util.ArrayList;
+import java.util.List;
 import Singleton.MineSweeperGameSingletone;
+import Observer.Observer;
+import Observer.ObserverNotification;
 
 public class MineSweeperModel {
+    private List<Observer> observers = new ArrayList<>();
+    private ObserverNotification observerNotification = new ObserverNotification();
 
     public MineSweeperModel() {
         initializeBoard();
+    }
+
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+        observerNotification.addObserver(observer);
+    }
+
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+        observerNotification.removeObserver(observer);
+    }
+
+    public void notifyObservers(Cell cell) {
+        observerNotification.notifyObservers(cell);
     }
 
     private void initializeBoard() {
