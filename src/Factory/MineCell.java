@@ -1,4 +1,4 @@
-﻿package Factory;
+package Factory;
 
 import MVC.Cell;
 
