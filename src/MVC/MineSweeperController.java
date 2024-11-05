@@ -20,10 +20,11 @@ public class MineSweeperController {
 
         view.setCellClickListener((row, col, isFlagClick) -> {
             Command command;
+            Cell cell = model.getCell(row, col);
             if (isFlagClick) {
-                command = new ToggleFlagCommand(model, view, row, col);//toggleFlag(row, col);
+                command = new ToggleFlagCommand(cell);
             } else {
-                command = new RevealCellCommand(model, view, row, col); //handleCellClick(row, col);
+                command = new RevealCellCommand(cell);
             }
             command.execute();
         });

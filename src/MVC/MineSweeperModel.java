@@ -68,6 +68,17 @@ public class MineSweeperModel {
         return MineSweeperGameSingletone.getInstance().getBoard()[row][col];
     }
 
+    public Pair getCell (Cell cell) {
+        for (int i=0; i<getRows(); i++) {
+            for (int j=0; j<getCols(); j++) {
+                if (getBoard()[i][j] == cell) {
+                    return new Pair(i, j);
+                }
+            }
+        }
+        return null;
+    }
+
     public int getRows() {
         return MineSweeperGameSingletone.getInstance().getRows();
     }
