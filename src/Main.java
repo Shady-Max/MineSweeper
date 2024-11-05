@@ -10,8 +10,13 @@ public class Main {
         int mines = 10;
 
         MineSweeperGameSingletone.getInstance(rows, cols, mines);
+
         MineSweeperModel model = new MineSweeperModel();
-        MineSweeperView view = new MineSweeperView(rows,cols);
-        MineSweeperController controller = new MineSweeperController(model, view);
+        MineSweeperView view = new MineSweeperView(rows, cols);
+
+        MineSweeperGameSingletone.getInstance()
+                .setModel(model)
+                .setView(view)
+                .setController(new MineSweeperController(model, view));
     }
 }
