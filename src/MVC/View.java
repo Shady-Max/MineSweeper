@@ -5,14 +5,15 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class MineSweeperView extends JFrame {
+public class View extends JFrame {
 
     private final JLabel minesLabel;
     private final JLabel timeLabel;
+    private final JLabel gameResultLabel;
     private final JButton[][] buttons;
     private CellClickListener clickListener;
 
-    public MineSweeperView(int rows, int cols) {
+    public View(int rows, int cols) {
         setTitle("MineSweeper");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -23,8 +24,10 @@ public class MineSweeperView extends JFrame {
         JPanel statusPanel = new JPanel();
         minesLabel = new JLabel("Mines: 0");
         timeLabel = new JLabel("Time: 0");
+        gameResultLabel = new JLabel("");
         statusPanel.add(minesLabel);
         statusPanel.add(timeLabel);
+        statusPanel.add(gameResultLabel);
 
         JPanel boardPanel = new JPanel(new GridLayout(rows, cols));
         buttons = new JButton[rows][cols];
@@ -60,11 +63,14 @@ public class MineSweeperView extends JFrame {
     }
 
     public void setFlag(int row, int col, boolean isFlagged) {
+        JButton button = buttons[row][col];
+        if (!button.isEnabled()) return;
         buttons[row][col].setText(isFlagged ? "F" : "");
     }
 
     public void revealCell(int row, int col, int adjacentMines) {
         JButton button = buttons[row][col];
+        if (!button.isEnabled()) return;
         button.setEnabled(false);
         button.setText(adjacentMines > 0 ? String.valueOf(adjacentMines) : "");
     }
@@ -75,11 +81,23 @@ public class MineSweeperView extends JFrame {
     }
 
     public void showGameOver() {
+        disableButtons();
+        gameResultLabel.setText("Game Over");
         JOptionPane.showMessageDialog(this, "Game Over!");
     }
 
     public void showWinMessage() {
+        disableButtons();
+        gameResultLabel.setText("You win!");
         JOptionPane.showMessageDialog(this, "You Win!");
+    }
+
+    public void disableButtons() {
+        for (int i=0; i<buttons.length; i++) {
+            for (int j=0; j<buttons[i].length; j++) {
+                buttons[i][j].setEnabled(false);
+            }
+        }
     }
 
     public void setMinesCount(int count) {

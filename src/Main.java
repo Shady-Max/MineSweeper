@@ -1,6 +1,7 @@
-import MVC.MineSweeperController;
-import MVC.MineSweeperModel;
-import MVC.MineSweeperView;
+import MVC.Controller;
+import MVC.Model;
+import MVC.View;
+import Singleton.Singleton;
 
 public class Main {
     public static void main(String[] args) {
@@ -8,8 +9,14 @@ public class Main {
         int cols = 10;
         int mines = 10;
 
-        MineSweeperModel model = new MineSweeperModel(rows,cols,mines);
-        MineSweeperView view = new MineSweeperView(rows,cols);
-        MineSweeperController controller = new MineSweeperController(model, view);
+        Singleton.getInstance(rows, cols, mines);
+
+        Model model = new Model();
+        View view = new View(rows, cols);
+
+        Singleton.getInstance()
+                .setModel(model)
+                .setView(view)
+                .setController(new Controller(model, view));
     }
 }
