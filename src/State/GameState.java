@@ -1,8 +1,8 @@
 package State;
 
-import MVC.MineSweeperModel;
+import MVC.Model;
 
 public interface GameState {
-    void handleInput(MineSweeperModel model);
+    void handleInput(Model model);
     String getStateName();
 }

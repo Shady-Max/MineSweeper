@@ -1,56 +1,53 @@
 package Singleton;
 
 import MVC.Cell;
-import MVC.MineSweeperController;
-import MVC.MineSweeperModel
-import MVC.MineSweeperView;
+import MVC.Controller;
+import MVC.Model;
+import MVC.View;
+import State.GameState;
+import State.LostState;
+import State.PlayingState;
+import State.WonState;
 
-public class MineSweeperGameSingletone {
-    private static MineSweeperGameSingletone instance;
-    private MineSweeperView view;
-    private MineSweeperModel model;
-    private MineSweeperController controller;
+public class Singleton {
+    private static Singleton instance;
+    private View view;
+    private Model model;
+    private Controller controller;
     private final int rows;
     private final int cols;
     private final int mines;
     private Cell[][] board;
     private boolean gameLost;
     private boolean gameWon;
-    private MineSweeperView view;
+    private GameState gameState;
 
-    private MineSweeperGameSingletone(int rows, int cols, int mines) {
+    private Singleton(int rows, int cols, int mines) {
+        gameState = new PlayingState();
         this.rows = rows;
         this.cols = cols;
         this.mines = mines;
     }
 
-    private MineSweeperGameSingletone() {
+    private Singleton() {
+        gameState = new PlayingState();
         rows = 10;
         cols = 10;
         mines = 10;
     }
 
-    public static MineSweeperGameSingletone getInstance(int rows, int cols, int mines) {
+    public static Singleton getInstance(int rows, int cols, int mines) {
         if (instance == null) {
-            instance = new MineSweeperGameSingletone(rows, cols, mines);
+            instance = new Singleton(rows, cols, mines);
         }
         return instance;
     }
 
-    public static MineSweeperGameSingletone getInstance() {
+    public static Singleton getInstance() {
         if (instance == null) {
-            return new MineSweeperGameSingletone();
+            return new Singleton();
         }
         return instance;
-    }
-
-    public void setView(MineSweeperView view) {
-        this.view = view;
-    }
-
-    // Add a method to get the view
-    public MineSweeperView getView() {
-        return view;
     }
 
     public boolean isInBounds(int row, int col) {
@@ -67,11 +64,15 @@ public class MineSweeperGameSingletone {
                 }
             }
         }
+        gameState = new WonState();
+        gameState.handleInput(model);
         return true;
     }
 
     public void setGameLost() {
         gameLost = true;
+        gameState = new LostState();
+        gameState.handleInput(model);
     }
 
     public boolean isGameLost() {
@@ -102,29 +103,29 @@ public class MineSweeperGameSingletone {
         return mines;
     }
 
-    public MineSweeperModel getModel() {
+    public Model getModel() {
         return model;
     }
 
-    public MineSweeperView getView() {
+    public View getView() {
         return view;
     }
 
-    public MineSweeperController getController() {
+    public Controller getController() {
         return controller;
     }
 
-    public MineSweeperGameSingletone setController(MineSweeperController controller) {
+    public Singleton setController(Controller controller) {
         this.controller = controller;
         return this;
     }
 
-    public MineSweeperGameSingletone setView(MineSweeperView view) {
+    public Singleton setView(View view) {
         this.view = view;
         return this;
     }
 
-    public MineSweeperGameSingletone setModel(MineSweeperModel model) {
+    public Singleton setModel(Model model) {
         this.model = model;
         return this;
     }

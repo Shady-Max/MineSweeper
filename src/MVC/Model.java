@@ -2,15 +2,15 @@ package MVC;
 
 import java.util.ArrayList;
 import java.util.List;
-import Singleton.MineSweeperGameSingletone;
+import Singleton.Singleton;
 import Observer.Observer;
 import Observer.ObserverNotification;
 
-public class MineSweeperModel {
+public class Model {
     private List<Observer> observers = new ArrayList<>();
     private ObserverNotification observerNotification = new ObserverNotification();
 
-    public MineSweeperModel() {
+    public Model() {
         initializeBoard();
     }
 
@@ -29,7 +29,7 @@ public class MineSweeperModel {
     }
 
     private void initializeBoard() {
-        MineSweeperGameSingletone singleton = MineSweeperGameSingletone.getInstance();
+        Singleton singleton = Singleton.getInstance();
         int rows = getRows();
         int cols = getCols();
         Cell[][] board = new Cell[rows][cols];
@@ -56,7 +56,7 @@ public class MineSweeperModel {
     }
 
     private void calculateAdjacentMines() {
-        MineSweeperGameSingletone singleton = MineSweeperGameSingletone.getInstance();
+        Singleton singleton = Singleton.getInstance();
         for (int i = 0; i < getRows(); i++) {
             for (int j = 0; j < getCols(); j++) {
                 if (!getBoard()[i][j].isMine()) {
@@ -81,11 +81,11 @@ public class MineSweeperModel {
     }
 
     public Cell[][] getBoard() {
-        return MineSweeperGameSingletone.getInstance().getBoard();
+        return Singleton.getInstance().getBoard();
     }
 
     public Cell getCell(int row, int col) {
-        return MineSweeperGameSingletone.getInstance().getBoard()[row][col];
+        return Singleton.getInstance().getBoard()[row][col];
     }
 
     public Pair getCell (Cell cell) {
@@ -100,14 +100,14 @@ public class MineSweeperModel {
     }
 
     public int getRows() {
-        return MineSweeperGameSingletone.getInstance().getRows();
+        return Singleton.getInstance().getRows();
     }
 
     public int getCols() {
-        return MineSweeperGameSingletone.getInstance().getCols();
+        return Singleton.getInstance().getCols();
     }
 
     public int getTotalMines() {
-        return MineSweeperGameSingletone.getInstance().getMines();
+        return Singleton.getInstance().getMines();
     }
 }

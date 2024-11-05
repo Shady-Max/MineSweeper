@@ -1,8 +1,6 @@
 package Command;
 
 import MVC.Cell;
-import MVC.MineSweeperModel;
-import MVC.MineSweeperView;
 
 public class ToggleFlagCommand implements Command {
     private final Cell cell;

@@ -1,20 +1,20 @@
 package MVC;
 
 import Command.*;
-import Singleton.MineSweeperGameSingletone;
+import Singleton.Singleton;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MineSweeperController {
+public class Controller {
 
-    private final MineSweeperModel model;
-    private final MineSweeperView view;
+    private final Model model;
+    private final View view;
     private Timer gameTimer;
     private int elapsedSeconds = 0;
 
-    public MineSweeperController(MineSweeperModel model, MineSweeperView view) {
+    public Controller(Model model, View view) {
         this.model = model;
         this.view = view;
 
@@ -29,7 +29,7 @@ public class MineSweeperController {
             command.execute();
         });
 
-        view.setMinesCount(MineSweeperGameSingletone.getInstance().getMines());
+        view.setMinesCount(Singleton.getInstance().getMines());
 
         startTimer();
     }
@@ -39,7 +39,7 @@ public class MineSweeperController {
         gameTimer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (MineSweeperGameSingletone.getInstance().isGameWon() || MineSweeperGameSingletone.getInstance().isGameLost()) {
+                if (Singleton.getInstance().isGameWon() || Singleton.getInstance().isGameLost()) {
                     stopTimer();
                     return;
                 }

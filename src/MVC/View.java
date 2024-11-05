@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class MineSweeperView extends JFrame {
+public class View extends JFrame {
 
     private final JLabel minesLabel;
     private final JLabel timeLabel;
@@ -13,7 +13,7 @@ public class MineSweeperView extends JFrame {
     private final JButton[][] buttons;
     private CellClickListener clickListener;
 
-    public MineSweeperView(int rows, int cols) {
+    public View(int rows, int cols) {
         setTitle("MineSweeper");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

@@ -1,15 +1,13 @@
 package State;
 
-import MVC.MineSweeperModel;
-import Singleton.MineSweeperGameSingletone;
+import MVC.Model;
+import Singleton.Singleton;
 
 public class WonState implements GameState {
     @Override
-    public void handleInput(MineSweeperModel model) {
-        MineSweeperGameSingletone singleton = MineSweeperGameSingletone.getInstance();
-
+    public void handleInput(Model model) {
+        Singleton singleton = Singleton.getInstance();
         singleton.getView().showWinMessage();
-
         singleton.getView().disableButtons();
     }
 
