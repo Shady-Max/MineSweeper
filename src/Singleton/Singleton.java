@@ -140,6 +140,6 @@ public class Singleton {
         model.initializeBoard();
         controller.startTimer();
 
-        model.notifyObservers(new Cell());
+        model.notifyObservers(null);
     }
 }

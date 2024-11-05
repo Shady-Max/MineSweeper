@@ -8,7 +8,7 @@ public class LostState implements GameState {
     public void handleInput(Model model) {
         Singleton singleton = Singleton.getInstance();
         singleton.getView().showGameOver();
-        singleton.getView().disableButtons();
+        //singleton.getView().disableButtons();
     }
 
     @Override

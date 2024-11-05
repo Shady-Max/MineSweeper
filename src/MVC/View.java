@@ -138,17 +138,12 @@ public class View extends JFrame {
 
     private void restartGame() {
         Singleton.getInstance().resetGame();
-
-        // Reset button states in the view
-        boardPanel.removeAll();
-        boardPanel.revalidate();
-        boardPanel.repaint();
-        addButtons(Singleton.getInstance().getRows(), Singleton.getInstance().getCols());
-//        for (int i = 0; i < buttons.length; i++)
-//            for (int j = 0; j < buttons[i].length; j++) {
-////                boardPanel.add(buttons[i][j]);
-//            }
-
+        for (int i = 0; i < buttons.length; i++) {
+            for (int j = 0; j < buttons[i].length; j++) {
+                buttons[i][j].setText("");
+                buttons[i][j].setEnabled(true);
+            }
+        }
         gameResultLabel.setText("");
     }
 
