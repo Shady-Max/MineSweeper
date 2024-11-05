@@ -1,5 +1,7 @@
 package MVC;
 
+import Singleton.MineSweeperGameSingletone;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,7 +25,7 @@ public class MineSweeperController {
             }
         });
 
-        view.setMinesCount(model.getTotalMines());
+        view.setMinesCount(MineSweeperGameSingletone.getInstance().getMines());
 
         startTimer();
     }
@@ -46,15 +48,27 @@ public class MineSweeperController {
         if (cell.isFlagged() || cell.isRevealed()) return;
 
         if (cell.isMine()) {
-            view.showMine(row, col);
+            revealMines();
             view.showGameOver();
             return;
         }
 
         revealCell(row, col);
 
-        if (isWinConditionMet()) {
+        if (MineSweeperGameSingletone.getInstance().isWinConditionMet()) {
             view.showWinMessage();
+        }
+    }
+
+    private void revealMines() {
+        MineSweeperGameSingletone singleton = MineSweeperGameSingletone.getInstance();
+        for (int row = 0; row < singleton.getRows(); row++) {
+            for (int col = 0; col < singleton.getCols(); col++) {
+                if (singleton.getBoard()[row][col].isMine()) {
+                    singleton.getBoard()[row][col].setRevealed(true);
+                    view.showMine(row, col);
+                }
+            }
         }
     }
 
@@ -70,24 +84,12 @@ public class MineSweeperController {
                 for (int j = -1; j <= 1; j++) {
                     int r = row + i;
                     int c = col + j;
-                    if (r >= 0 && r < model.getRows() && c >= 0 && c < model.getCols()) {
+                    if (MineSweeperGameSingletone.getInstance().isInBounds(r, c)) {
                         revealCell(r, c);
                     }
                 }
             }
         }
-    }
-
-    private boolean isWinConditionMet() {
-        for (int row = 0; row < model.getRows(); row++) {
-            for (int col = 0; col < model.getCols(); col++) {
-                Cell cell = model.getCell(row, col);
-                if (!cell.isMine() && !cell.isRevealed()) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     private void toggleFlag(int row, int col) {

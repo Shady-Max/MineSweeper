@@ -1,47 +1,46 @@
 package MVC;
 
-public class MineSweeperModel {
-    private final int rows;
-    private final int cols;
-    private final int totalMines;
-    private Cell[][] board;
+import Singleton.MineSweeperGameSingletone;
 
-    public MineSweeperModel(int rows, int cols, int totalMines) {
-        this.rows = rows;
-        this.cols = cols;
-        this.totalMines = totalMines;
+public class MineSweeperModel {
+
+    public MineSweeperModel() {
         initializeBoard();
     }
 
     private void initializeBoard() {
-        board = new Cell[rows][cols];
+        MineSweeperGameSingletone singleton = MineSweeperGameSingletone.getInstance();
+        int rows = getRows();
+        int cols = getCols();
+        Cell[][] board = new Cell[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 board[i][j] = new Cell();
             }
         }
+        singleton.setBoard(board);
         placeMines();
         calculateAdjacentMines();
     }
 
     private void placeMines() {
-        // Randomly place mines on the board
         int minesPlaced = 0;
-        while (minesPlaced < totalMines) {
-            int r = (int) (Math.random() * rows);
-            int c = (int) (Math.random() * cols);
-            if (!board[r][c].isMine()) {
-                board[r][c].setMine(true);
+        while (minesPlaced < getTotalMines()) {
+            int r = (int) (Math.random() * getRows());
+            int c = (int) (Math.random() * getCols());
+            if (!getBoard()[r][c].isMine()) {
+                getBoard()[r][c].setMine(true);
                 minesPlaced++;
             }
         }
     }
 
     private void calculateAdjacentMines() {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (!board[i][j].isMine()) {
-                    board[i][j].setAdjacentMines(countAdjacentMines(i, j));
+        MineSweeperGameSingletone singleton = MineSweeperGameSingletone.getInstance();
+        for (int i = 0; i < getRows(); i++) {
+            for (int j = 0; j < getCols(); j++) {
+                if (!getBoard()[i][j].isMine()) {
+                    getBoard()[i][j].setAdjacentMines(countAdjacentMines(i, j));
                 }
             }
         }
@@ -53,7 +52,7 @@ public class MineSweeperModel {
             for (int j = -1; j <= 1; j++) {
                 int r = row + i;
                 int c = col + j;
-                if (r >= 0 && r < rows && c >= 0 && c < cols && board[r][c].isMine()) {
+                if (r >= 0 && r < getRows() && c >= 0 && c < getCols() && getBoard()[r][c].isMine()) {
                     count++;
                 }
             }
@@ -61,19 +60,23 @@ public class MineSweeperModel {
         return count;
     }
 
+    public Cell[][] getBoard() {
+        return MineSweeperGameSingletone.getInstance().getBoard();
+    }
+
     public Cell getCell(int row, int col) {
-        return board[row][col];
+        return MineSweeperGameSingletone.getInstance().getBoard()[row][col];
     }
 
     public int getRows() {
-        return rows;
+        return MineSweeperGameSingletone.getInstance().getRows();
     }
 
     public int getCols() {
-        return cols;
+        return MineSweeperGameSingletone.getInstance().getCols();
     }
 
     public int getTotalMines() {
-        return totalMines;
+        return MineSweeperGameSingletone.getInstance().getMines();
     }
 }

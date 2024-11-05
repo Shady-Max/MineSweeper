@@ -1,6 +1,7 @@
 import MVC.MineSweeperController;
 import MVC.MineSweeperModel;
 import MVC.MineSweeperView;
+import Singleton.MineSweeperGameSingletone;
 
 public class Main {
     public static void main(String[] args) {
@@ -8,7 +9,8 @@ public class Main {
         int cols = 10;
         int mines = 10;
 
-        MineSweeperModel model = new MineSweeperModel(rows,cols,mines);
+        MineSweeperGameSingletone.getInstance(rows, cols, mines);
+        MineSweeperModel model = new MineSweeperModel();
         MineSweeperView view = new MineSweeperView(rows,cols);
         MineSweeperController controller = new MineSweeperController(model, view);
     }
