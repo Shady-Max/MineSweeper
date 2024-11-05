@@ -1,5 +1,6 @@
 package MVC;
 
+import Command.*;
 import Singleton.MineSweeperGameSingletone;
 
 import javax.swing.*;
@@ -18,11 +19,13 @@ public class MineSweeperController {
         this.view = view;
 
         view.setCellClickListener((row, col, isFlagClick) -> {
+            Command command;
             if (isFlagClick) {
-                toggleFlag(row, col);
+                command = new ToggleFlagCommand(model, view, row, col);//toggleFlag(row, col);
             } else {
-                handleCellClick(row, col);
+                command = new RevealCellCommand(model, view, row, col); //handleCellClick(row, col);
             }
+            command.execute();
         });
 
         view.setMinesCount(MineSweeperGameSingletone.getInstance().getMines());
@@ -35,6 +38,11 @@ public class MineSweeperController {
         gameTimer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (MineSweeperGameSingletone.getInstance().isGameWon() || MineSweeperGameSingletone.getInstance().isGameLost()) {
+                    stopTimer();
+                    return;
+                }
+
                 elapsedSeconds++;
                 view.setTimeCount(elapsedSeconds);
             }
@@ -42,61 +50,8 @@ public class MineSweeperController {
         gameTimer.start();
     }
 
-    private void handleCellClick(int row, int col) {
-        Cell cell = model.getCell(row, col);
-
-        if (cell.isFlagged() || cell.isRevealed()) return;
-
-        if (cell.isMine()) {
-            revealMines();
-            view.showGameOver();
-            return;
-        }
-
-        revealCell(row, col);
-
-        if (MineSweeperGameSingletone.getInstance().isWinConditionMet()) {
-            view.showWinMessage();
-        }
-    }
-
-    private void revealMines() {
-        MineSweeperGameSingletone singleton = MineSweeperGameSingletone.getInstance();
-        for (int row = 0; row < singleton.getRows(); row++) {
-            for (int col = 0; col < singleton.getCols(); col++) {
-                if (singleton.getBoard()[row][col].isMine()) {
-                    singleton.getBoard()[row][col].setRevealed(true);
-                    view.showMine(row, col);
-                }
-            }
-        }
-    }
-
-    private void revealCell(int row, int col) {
-        Cell cell = model.getCell(row, col);
-        if (cell.isRevealed()) return;
-
-        cell.setRevealed(true);
-        view.revealCell(row, col, cell.getAdjacentMines());
-
-        if (cell.getAdjacentMines() == 0) {
-            for (int i = -1; i <= 1; i++) {
-                for (int j = -1; j <= 1; j++) {
-                    int r = row + i;
-                    int c = col + j;
-                    if (MineSweeperGameSingletone.getInstance().isInBounds(r, c)) {
-                        revealCell(r, c);
-                    }
-                }
-            }
-        }
-    }
-
-    private void toggleFlag(int row, int col) {
-        Cell cell = model.getCell(row, col);
-        if (!cell.isRevealed()) {
-            cell.setFlagged(!cell.isFlagged());
-            view.setFlag(row, col, cell.isFlagged());
-        }
+    private void stopTimer() {
+        if (gameTimer == null) { return; }
+        gameTimer.stop();
     }
 }
