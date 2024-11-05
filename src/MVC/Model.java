@@ -2,6 +2,10 @@ package MVC;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import Factory.EmptyCell;
+import Factory.MineCell;
+import Factory.NumberCell;
 import Singleton.Singleton;
 import Observer.Observer;
 import Observer.ObserverNotification;
@@ -35,7 +39,7 @@ public class Model {
         Cell[][] board = new Cell[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                board[i][j] = new Cell();
+                board[i][j] = new EmptyCell();
             }
         }
         singleton.setBoard(board);
@@ -49,7 +53,7 @@ public class Model {
             int r = (int) (Math.random() * getRows());
             int c = (int) (Math.random() * getCols());
             if (!getBoard()[r][c].isMine()) {
-                getBoard()[r][c].setMine(true);
+                getBoard()[r][c] = new MineCell();
                 minesPlaced++;
             }
         }
@@ -60,7 +64,7 @@ public class Model {
         for (int i = 0; i < getRows(); i++) {
             for (int j = 0; j < getCols(); j++) {
                 if (!getBoard()[i][j].isMine()) {
-                    getBoard()[i][j].setAdjacentMines(countAdjacentMines(i, j));
+                    getBoard()[i][j] = new NumberCell(countAdjacentMines(i, j));
                 }
             }
         }

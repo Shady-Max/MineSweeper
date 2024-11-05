@@ -3,7 +3,7 @@ package MVC;
 import State.CellState;
 import State.HiddenState;
 
-public class Cell {
+public abstract class Cell {
     private CellState state;
     private boolean isMine;
     private boolean isRevealed;
@@ -37,4 +37,7 @@ public class Cell {
     public void toggleFlag() {
         state.toggleFlag(this);
     }
+
+    // Method for displaying cells' status
+    public abstract String display();
 }
