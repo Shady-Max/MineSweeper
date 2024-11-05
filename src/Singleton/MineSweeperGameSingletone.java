@@ -1,10 +1,15 @@
 package Singleton;
 
 import MVC.Cell;
+import MVC.MineSweeperController;
+import MVC.MineSweeperModel
 import MVC.MineSweeperView;
 
 public class MineSweeperGameSingletone {
     private static MineSweeperGameSingletone instance;
+    private MineSweeperView view;
+    private MineSweeperModel model;
+    private MineSweeperController controller;
     private final int rows;
     private final int cols;
     private final int mines;
@@ -19,6 +24,12 @@ public class MineSweeperGameSingletone {
         this.mines = mines;
     }
 
+    private MineSweeperGameSingletone() {
+        rows = 10;
+        cols = 10;
+        mines = 10;
+    }
+
     public static MineSweeperGameSingletone getInstance(int rows, int cols, int mines) {
         if (instance == null) {
             instance = new MineSweeperGameSingletone(rows, cols, mines);
@@ -28,7 +39,7 @@ public class MineSweeperGameSingletone {
 
     public static MineSweeperGameSingletone getInstance() {
         if (instance == null) {
-            return new MineSweeperGameSingletone(10, 10, 10);
+            return new MineSweeperGameSingletone();
         }
         return instance;
     }
@@ -59,6 +70,10 @@ public class MineSweeperGameSingletone {
         return true;
     }
 
+    public void setGameLost() {
+        gameLost = true;
+    }
+
     public boolean isGameLost() {
         return gameLost;
     }
@@ -85,5 +100,32 @@ public class MineSweeperGameSingletone {
 
     public int getMines() {
         return mines;
+    }
+
+    public MineSweeperModel getModel() {
+        return model;
+    }
+
+    public MineSweeperView getView() {
+        return view;
+    }
+
+    public MineSweeperController getController() {
+        return controller;
+    }
+
+    public MineSweeperGameSingletone setController(MineSweeperController controller) {
+        this.controller = controller;
+        return this;
+    }
+
+    public MineSweeperGameSingletone setView(MineSweeperView view) {
+        this.view = view;
+        return this;
+    }
+
+    public MineSweeperGameSingletone setModel(MineSweeperModel model) {
+        this.model = model;
+        return this;
     }
 }
