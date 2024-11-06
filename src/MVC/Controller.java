@@ -51,6 +51,10 @@ public class Controller {
         gameTimer.start();
     }
 
+    public int getTime() {
+        return elapsedSeconds;
+    }
+
     private void stopTimer() {
         if (gameTimer == null) { return; }
         gameTimer.stop();

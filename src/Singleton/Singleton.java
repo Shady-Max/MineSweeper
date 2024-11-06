@@ -1,5 +1,6 @@
 package Singleton;
 
+import Adapter.LeaderboardAdapter;
 import MVC.Cell;
 import MVC.Controller;
 import MVC.Model;
@@ -8,6 +9,9 @@ import State.GameState;
 import State.LostState;
 import State.PlayingState;
 import State.WonState;
+import Adapter.Score;
+import Adapter.Leaderboard;
+import MVC.LeaderboardView;
 
 import javax.swing.*;
 
@@ -23,12 +27,15 @@ public class Singleton {
     private boolean gameLost;
     private boolean gameWon;
     private GameState gameState;
+    private Leaderboard leaderboard;
+    private LeaderboardView leaderboardView;
 
     private Singleton(int rows, int cols, int mines) {
         gameState = new PlayingState();
         this.rows = rows;
         this.cols = cols;
         this.mines = mines;
+        this.leaderboard = new LeaderboardAdapter();
     }
 
     private Singleton() {
@@ -36,6 +43,7 @@ public class Singleton {
         rows = 10;
         cols = 10;
         mines = 10;
+        leaderboard = new LeaderboardAdapter();
     }
 
     public static Singleton getInstance(int rows, int cols, int mines) {
@@ -66,6 +74,14 @@ public class Singleton {
                 }
             }
         }
+        System.out.println("Player won the game!");
+        String playerName = JOptionPane.showInputDialog("Enter your name: ");
+        Score playerScore = new Score(playerName, controller.getTime());
+        leaderboard.addScore(playerScore);
+        if ( leaderboardView != null ) {
+            leaderboard.closeScores();
+        }
+        leaderboard.displayScores();
         gameState = new WonState();
         gameState.handleInput(model);
         return true;
@@ -138,5 +154,14 @@ public class Singleton {
         gameState = new PlayingState();
         model.initializeBoard();
         controller.startTimer();
+    }
+
+    public void showLeaderboard() {
+        leaderboardView = new LeaderboardView(leaderboard);
+        leaderboardView.showLeaderboardView();
+    }
+
+    public void closeLeaderboard() {
+        leaderboardView.closeLeaderboardView();
     }
 }
