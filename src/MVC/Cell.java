@@ -41,33 +41,4 @@ public abstract class Cell {
     // Method for displaying cells' status
     public abstract String display();
 
-    }
-    /*
-
-public class Cell implements Component {
-    private CellState state;
-    private boolean isMine;
-    private boolean isRevealed;
-    private boolean isFlagged;
-    private int adjacentMines;
-
-    // Reveal logic should go here. Should ask Max
-    @Override
-    public void reveal() {
-        if (!isFlagged) {
-            isRevealed = true;
-            // Additional logic for revealing a cell
-        }
-    }
-
-    public void toggleFlag() {
-        state.toggleFlag(this);
-    }                               // Mb need to fix it
-    @Override
-    public void toggleFlag() {
-        isFlagged = !isFlagged;
-        // Additional flag logic
-    }
 }
-
-     */

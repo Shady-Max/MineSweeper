@@ -8,7 +8,6 @@ import State.GameState;
 import State.LostState;
 import State.PlayingState;
 import State.WonState;
-import Observer.*;
 
 import javax.swing.*;
 
@@ -139,7 +138,5 @@ public class Singleton {
         gameState = new PlayingState();
         model.initializeBoard();
         controller.startTimer();
-
-        model.notifyObservers(null);
     }
 }

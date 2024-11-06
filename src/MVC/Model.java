@@ -7,29 +7,11 @@ import Factory.EmptyCell;
 import Factory.MineCell;
 import Factory.NumberCell;
 import Singleton.Singleton;
-import Observer.Observer;
-import Observer.ObserverNotification;
 
 public class Model {
-    private List<Observer> observers = new ArrayList<>();
-    private ObserverNotification observerNotification = new ObserverNotification();
 
     public Model() {
         initializeBoard();
-    }
-
-    public void addObserver(Observer observer) {
-        observers.add(observer);
-        observerNotification.addObserver(observer);
-    }
-
-    public void removeObserver(Observer observer) {
-        observers.remove(observer);
-        observerNotification.removeObserver(observer);
-    }
-
-    public void notifyObservers(Cell cell) {
-        observerNotification.notifyObservers(cell);
     }
 
     public void initializeBoard() {
