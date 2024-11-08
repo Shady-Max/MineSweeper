@@ -7,7 +7,6 @@ import State.CellState;
 
 public class CellProxy extends Cell {
     private Cell realcell;
-    private boolean isFlagged = false;
 
     public CellProxy(Cell realcell) {
         this.realcell = realcell;
@@ -15,7 +14,7 @@ public class CellProxy extends Cell {
 
     @Override
     public void reveal() {
-        if (!isFlagged && !realcell.isRevealed()) {
+        if (!realcell.isFlagged() && !realcell.isRevealed()) {
             realcell.reveal();
             System.out.println("CellProxy: Revealing cell of type " + realcell.getClass().getSimpleName());
         }
@@ -26,8 +25,8 @@ public class CellProxy extends Cell {
 
     @Override
     public void toggleFlag() {
-        isFlagged = !isFlagged;
-        System.out.println("CellProxy: Flag status changed to " + isFlagged);
+        realcell.toggleFlag();
+        System.out.println("CellProxy: Flag status changed to " + realcell.isFlagged());
     }
     @Override
     public String display() {

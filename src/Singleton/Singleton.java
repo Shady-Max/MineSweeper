@@ -5,6 +5,7 @@ import MVC.Cell;
 import MVC.Controller;
 import MVC.Model;
 import MVC.View;
+import Proxy.CellProxy;
 import State.GameState;
 import State.LostState;
 import State.PlayingState;
@@ -66,13 +67,21 @@ public class Singleton {
 
     public boolean isWinConditionMet() {
         gameWon = true;
+        int flagged=0;
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 if (!board[row][col].isMine() && !board[row][col].isRevealed()) {
                     gameWon = false;
                     return false;
                 }
+                if (board[row][col].isMine() && board[row][col].isFlagged()) {
+                    flagged++;
+                }
             }
+        }
+        if (flagged != mines) {
+            gameWon = false;
+            return false;
         }
         System.out.println("Player won the game!");
         String playerName = JOptionPane.showInputDialog("Enter your name: ");
@@ -163,5 +172,14 @@ public class Singleton {
 
     public void closeLeaderboard() {
         leaderboardView.closeLeaderboardView();
+    }
+
+    public void DebugBoard() {
+        for (int i=0; i<rows; i++) {
+            for (int j=0; j<cols; j++) {
+                System.out.print(board[i][j].getCell().getClass().getSimpleName() + " ");
+            }
+            System.out.println();
+        }
     }
 }

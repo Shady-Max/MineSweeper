@@ -18,15 +18,16 @@ public class HiddenState implements CellState{
 
         Pair row_col= Singleton.getInstance().getModel().getCell(cell);
         revealCell(row_col.first(), row_col.second());
-
         Singleton.getInstance().isWinConditionMet();
     }
 
     @Override
     public void toggleFlag(Cell cell) {
         cell.setState(new FlaggedState());
+        cell.setFlagged(true);
         Pair row_col= Singleton.getInstance().getModel().getCell(cell);
         Singleton.getInstance().getView().setFlag(row_col.first(), row_col.second(),true);
+        Singleton.getInstance().isWinConditionMet();
     }
 
     private void revealMines() {
@@ -46,6 +47,8 @@ public class HiddenState implements CellState{
         if (cell.isRevealed()) return;
 
         cell.setRevealed(true);
+        cell.setState(new RevealedState());
+
         Singleton.getInstance().getView().revealCell(row, col, cell.getAdjacentMines());
 
         if (cell.getAdjacentMines() == 0) {

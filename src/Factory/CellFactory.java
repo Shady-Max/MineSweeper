@@ -9,7 +9,7 @@ public class CellFactory {
         if (isMine) {
             cell = new MineCell();
         }
-        else if(adjacentMines < 0) {
+        else if(adjacentMines > 0) { // prev adjacentMines < 0
             cell = new NumberCell(adjacentMines);
         }
         else {
