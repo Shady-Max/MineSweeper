@@ -41,4 +41,7 @@ public abstract class Cell {
     // Method for displaying cells' status
     public abstract String display();
 
+    public Cell getCell() {
+        return this;
+    }
 }
