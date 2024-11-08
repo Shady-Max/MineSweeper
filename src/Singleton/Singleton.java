@@ -1,14 +1,18 @@
 package Singleton;
 
+import Adapter.LeaderboardAdapter;
 import MVC.Cell;
 import MVC.Controller;
 import MVC.Model;
 import MVC.View;
+import Proxy.CellProxy;
 import State.GameState;
 import State.LostState;
 import State.PlayingState;
 import State.WonState;
-import Observer.*;
+import Adapter.Score;
+import Adapter.Leaderboard;
+import MVC.LeaderboardView;
 
 import javax.swing.*;
 
@@ -24,12 +28,15 @@ public class Singleton {
     private boolean gameLost;
     private boolean gameWon;
     private GameState gameState;
+    private Leaderboard leaderboard;
+    private LeaderboardView leaderboardView;
 
     private Singleton(int rows, int cols, int mines) {
         gameState = new PlayingState();
         this.rows = rows;
         this.cols = cols;
         this.mines = mines;
+        this.leaderboard = new LeaderboardAdapter();
     }
 
     private Singleton() {
@@ -37,6 +44,7 @@ public class Singleton {
         rows = 10;
         cols = 10;
         mines = 10;
+        leaderboard = new LeaderboardAdapter();
     }
 
     public static Singleton getInstance(int rows, int cols, int mines) {
@@ -59,14 +67,30 @@ public class Singleton {
 
     public boolean isWinConditionMet() {
         gameWon = true;
+        int flagged=0;
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 if (!board[row][col].isMine() && !board[row][col].isRevealed()) {
                     gameWon = false;
                     return false;
                 }
+                if (board[row][col].isMine() && board[row][col].isFlagged()) {
+                    flagged++;
+                }
             }
         }
+        if (flagged != mines) {
+            gameWon = false;
+            return false;
+        }
+        System.out.println("Player won the game!");
+        String playerName = JOptionPane.showInputDialog("Enter your name: ");
+        Score playerScore = new Score(playerName, controller.getTime());
+        leaderboard.addScore(playerScore);
+        if ( leaderboardView != null ) {
+            leaderboard.closeScores();
+        }
+        leaderboard.displayScores();
         gameState = new WonState();
         gameState.handleInput(model);
         return true;
@@ -139,7 +163,23 @@ public class Singleton {
         gameState = new PlayingState();
         model.initializeBoard();
         controller.startTimer();
+    }
 
-        model.notifyObservers(null);
+    public void showLeaderboard() {
+        leaderboardView = new LeaderboardView(leaderboard);
+        leaderboardView.showLeaderboardView();
+    }
+
+    public void closeLeaderboard() {
+        leaderboardView.closeLeaderboardView();
+    }
+
+    public void DebugBoard() {
+        for (int i=0; i<rows; i++) {
+            for (int j=0; j<cols; j++) {
+                System.out.print(board[i][j].getCell().getClass().getSimpleName() + " ");
+            }
+            System.out.println();
+        }
     }
 }

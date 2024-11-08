@@ -3,33 +3,16 @@ package MVC;
 import java.util.ArrayList;
 import java.util.List;
 
+import Factory.CellFactory;
 import Factory.EmptyCell;
 import Factory.MineCell;
 import Factory.NumberCell;
 import Singleton.Singleton;
-import Observer.Observer;
-import Observer.ObserverNotification;
 
 public class Model {
-    private List<Observer> observers = new ArrayList<>();
-    private ObserverNotification observerNotification = new ObserverNotification();
 
     public Model() {
         initializeBoard();
-    }
-
-    public void addObserver(Observer observer) {
-        observers.add(observer);
-        observerNotification.addObserver(observer);
-    }
-
-    public void removeObserver(Observer observer) {
-        observers.remove(observer);
-        observerNotification.removeObserver(observer);
-    }
-
-    public void notifyObservers(Cell cell) {
-        observerNotification.notifyObservers(cell);
     }
 
     public void initializeBoard() {
@@ -39,7 +22,7 @@ public class Model {
         Cell[][] board = new Cell[rows][cols];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                board[i][j] = new EmptyCell();
+                board[i][j] = CellFactory.createCell(false, 0);
             }
         }
         singleton.setBoard(board);
@@ -53,7 +36,7 @@ public class Model {
             int r = (int) (Math.random() * getRows());
             int c = (int) (Math.random() * getCols());
             if (!getBoard()[r][c].isMine()) {
-                getBoard()[r][c] = new MineCell();
+                getBoard()[r][c] = CellFactory.createCell(true, 0);
                 minesPlaced++;
             }
         }
@@ -64,7 +47,7 @@ public class Model {
         for (int i = 0; i < getRows(); i++) {
             for (int j = 0; j < getCols(); j++) {
                 if (!getBoard()[i][j].isMine()) {
-                    getBoard()[i][j] = new NumberCell(countAdjacentMines(i, j));
+                    getBoard()[i][j] = CellFactory.createCell(false, countAdjacentMines(i, j));
                 }
             }
         }
@@ -95,7 +78,7 @@ public class Model {
     public Pair getCell (Cell cell) {
         for (int i=0; i<getRows(); i++) {
             for (int j=0; j<getCols(); j++) {
-                if (getBoard()[i][j] == cell) {
+                if (getBoard()[i][j].getCell() == cell.getCell()) {
                     return new Pair(i, j);
                 }
             }

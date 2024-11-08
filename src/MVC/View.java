@@ -4,8 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import Adapter.Leaderboard;
 import Singleton.Singleton;
-import MVC.Controller;
 
 public class View extends JFrame {
 

@@ -1,17 +1,20 @@
 package Factory;
 
 import MVC.Cell;
+import Proxy.CellProxy;
 
 public class CellFactory {
-    public static Cell createCell(boolean isMine, int adjacentMines) {
+    public static CellProxy createCell(boolean isMine, int adjacentMines) {
+        Cell cell;
         if (isMine) {
-            return new MineCell();
+            cell = new MineCell();
         }
-        else if(adjacentMines < 0) {
-            return new NumberCell(adjacentMines);
+        else if(adjacentMines > 0) { // prev adjacentMines < 0
+            cell = new NumberCell(adjacentMines);
         }
         else {
-            return new EmptyCell();
+            cell = new EmptyCell();
         }
+        return new CellProxy(cell);
     }
 }
